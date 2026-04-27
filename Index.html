@@ -1,0 +1,635 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>4flow — Automação de Mensagens</title>
+
+  <!-- Fontes -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+  <!-- ── CSS (ordem importa) ── -->
+  <link rel="stylesheet" href="css/variables.css">
+  <link rel="stylesheet" href="css/base.css">
+  <link rel="stylesheet" href="css/login.css">
+  <link rel="stylesheet" href="css/sidebar.css">
+  <link rel="stylesheet" href="css/layout.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/tables.css">
+  <link rel="stylesheet" href="css/modals.css">
+  <link rel="stylesheet" href="css/flow-builder.css">
+  <link rel="stylesheet" href="css/conversations.css">
+</head>
+<body>
+
+<!-- ════════════════════════════════════════════════
+     TELA DE LOGIN
+════════════════════════════════════════════════ -->
+<div id="login-screen">
+  <div class="login-wrap">
+    <div class="login-logo">4<span>flow</span></div>
+    <div class="login-tagline">Automação de mensagens sem complicação.</div>
+    <div class="login-card">
+      <div class="login-field">
+        <label>E-mail</label>
+        <input type="email" id="l-email" placeholder="seu@email.com">
+      </div>
+      <div class="login-field">
+        <label>Senha</label>
+        <input type="password" id="l-pass" placeholder="••••••••">
+      </div>
+      <button class="login-btn" onclick="doLogin()">Entrar no 4flow</button>
+      <div class="login-error" id="l-err">E-mail ou senha incorretos.</div>
+    </div>
+    <div class="login-hint">Demo: admin@4flow.app / 4flow2024</div>
+  </div>
+</div>
+
+
+<!-- ════════════════════════════════════════════════
+     APLICAÇÃO PRINCIPAL
+════════════════════════════════════════════════ -->
+<div id="app" style="display:none">
+
+  <!-- ── SIDEBAR ── -->
+  <div class="sb">
+    <div class="sb-logo">
+      <div class="sb-logo-icon">4f</div>
+      <div class="sb-logo-text">4<span>flow</span></div>
+    </div>
+
+    <div class="sb-user">
+      <div class="sb-user-av" id="sb-av">AD</div>
+      <div class="sb-user-name" id="sb-name">Admin</div>
+      <button class="sb-logout" onclick="doLogout()" title="Sair">↩</button>
+    </div>
+
+    <nav class="sb-nav">
+      <div class="sb-item active" data-view="dashboard" onclick="go(this,'dashboard')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/>
+          <rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/>
+        </svg>
+        Dashboard
+      </div>
+
+      <div class="sb-section">Mensagens</div>
+
+      <div class="sb-item" data-view="contatos" onclick="go(this,'contatos')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/>
+        </svg>
+        Contatos
+      </div>
+
+      <div class="sb-item" data-view="disparos" onclick="go(this,'disparos')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M22 2 11 13"/><path d="M22 2 15 22l-4-9-9-4 20-7z"/>
+        </svg>
+        Disparos
+      </div>
+
+      <div class="sb-item" data-view="conversas" onclick="go(this,'conversas')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+        </svg>
+        Conversas
+        <span class="badge badge-gold" style="margin-left:auto;font-size:10px;padding:2px 6px">3</span>
+      </div>
+
+      <div class="sb-section">Automação</div>
+
+      <div class="sb-item" data-view="fluxos" onclick="go(this,'fluxos')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M5 12h14"/><path d="m12 5 7 7-7 7"/>
+        </svg>
+        Fluxos
+      </div>
+
+      <div class="sb-section">Sistema</div>
+
+      <div class="sb-item" data-view="integracoes" onclick="go(this,'integracoes')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="18" cy="6" r="3"/><circle cx="6" cy="18" r="3"/>
+          <path d="m8.6 14.7 6.8-5.4"/>
+        </svg>
+        Integrações
+      </div>
+
+      <div class="sb-item" data-view="config" onclick="go(this,'config')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="12" cy="12" r="3"/>
+          <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09a1.65 1.65 0 0 0-1.08-1.51 1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/>
+        </svg>
+        Configurações
+      </div>
+    </nav>
+
+    <div class="sb-bottom">
+      <div class="sb-badge">
+        <div class="sb-badge-dot"></div>
+        <div class="sb-badge-text">Webhook ativo</div>
+      </div>
+    </div>
+  </div><!-- /sb -->
+
+
+  <!-- ── ÁREA PRINCIPAL ── -->
+  <div class="main">
+
+    <!-- ── VIEW: Dashboard ── -->
+    <div class="view active" id="v-dashboard">
+      <div class="view-header">
+        <div>
+          <div class="view-title">Dashboard</div>
+          <div class="view-sub">Últimos 30 dias</div>
+        </div>
+        <div style="display:flex;gap:9px;align-items:center">
+          <span class="badge badge-green" style="padding:5px 11px">● Ao vivo</span>
+          <button class="btn btn-secondary btn-sm">↓ Exportar</button>
+        </div>
+      </div>
+
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-label">Contatos</div>
+          <div class="stat-value" style="color:var(--text)">1.247</div>
+          <div class="stat-change up">▲ +143 este mês</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">Msgs Enviadas</div>
+          <div class="stat-value" style="color:var(--accent)">8.391</div>
+          <div class="stat-change up">▲ +22% vs ant.</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">Taxa de Resposta</div>
+          <div class="stat-value" style="color:var(--green)">67%</div>
+          <div class="stat-change up">▲ +5pp este mês</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">Fluxos Ativos</div>
+          <div class="stat-value" style="color:var(--gold)">12</div>
+          <div class="stat-change up">▲ 3 novos</div>
+        </div>
+      </div>
+
+      <div class="two-col">
+        <div class="tbl-card">
+          <div class="tbl-toolbar"><span class="tbl-toolbar-title">Atividade Recente</span></div>
+          <div>
+            <div class="activity-item"><div class="activity-dot" style="background:var(--green)"></div><div class="activity-text"><strong>Disparo "Promoção Junho"</strong> enviado para 342 contatos</div><div class="activity-time">2m</div></div>
+            <div class="activity-item"><div class="activity-dot" style="background:var(--accent)"></div><div class="activity-text"><strong>Novo contato</strong> via Instagram: @ana.silva</div><div class="activity-time">8m</div></div>
+            <div class="activity-item"><div class="activity-dot" style="background:var(--gold)"></div><div class="activity-text"><strong>Fluxo "Boas-vindas"</strong> disparado — 24 leads</div><div class="activity-time">15m</div></div>
+            <div class="activity-item"><div class="activity-dot" style="background:var(--green)"></div><div class="activity-text"><strong>Webhook WA</strong> — 7 respostas novas</div><div class="activity-time">31m</div></div>
+            <div class="activity-item"><div class="activity-dot" style="background:var(--accent)"></div><div class="activity-text"><strong>ActiveCampaign sync</strong> — 89 contatos atualizados</div><div class="activity-time">1h</div></div>
+          </div>
+        </div>
+
+        <div class="tbl-card">
+          <div class="tbl-toolbar"><span class="tbl-toolbar-title">Canais</span></div>
+          <div style="padding:18px 20px">
+            <div class="channel-bar-row">
+              <div style="display:flex;justify-content:space-between;margin-bottom:6px">
+                <div style="display:flex;align-items:center;gap:8px"><div class="ch ch-wa">📱</div><span>WhatsApp</span></div>
+                <span class="mono" style="font-size:13px">4.821 <span style="color:var(--muted2);font-size:11px">57%</span></span>
+              </div>
+              <div class="channel-bar-track"><div class="channel-bar-fill" style="width:57%;background:#25D366"></div></div>
+            </div>
+            <div class="channel-bar-row">
+              <div style="display:flex;justify-content:space-between;margin-bottom:6px">
+                <div style="display:flex;align-items:center;gap:8px"><div class="ch ch-ig">📸</div><span>Instagram</span></div>
+                <span class="mono" style="font-size:13px">2.907 <span style="color:var(--muted2);font-size:11px">35%</span></span>
+              </div>
+              <div class="channel-bar-track"><div class="channel-bar-fill" style="width:35%;background:#E1306C"></div></div>
+            </div>
+            <div class="channel-bar-row">
+              <div style="display:flex;justify-content:space-between;margin-bottom:6px">
+                <div style="display:flex;align-items:center;gap:8px"><div class="ch ch-tg">✈</div><span>Telegram</span></div>
+                <span class="mono" style="font-size:13px">663 <span style="color:var(--muted2);font-size:11px">8%</span></span>
+              </div>
+              <div class="channel-bar-track"><div class="channel-bar-fill" style="width:8%;background:#0088CC"></div></div>
+            </div>
+            <div style="border-top:1px solid var(--border);padding-top:14px;margin-top:4px">
+              <div style="font-size:11px;font-weight:700;color:var(--muted2);text-transform:uppercase;letter-spacing:.6px;margin-bottom:10px">Números Ativos</div>
+              <div style="display:flex;flex-direction:column;gap:6px">
+                <div style="display:flex;align-items:center;gap:7px;font-size:12.5px" class="mono">
+                  <div class="ch ch-wa" style="width:20px;height:20px;font-size:11px">📱</div>
+                  +55 85 9 8811-2233 <span class="badge badge-green" style="font-size:10px;padding:1px 6px">Principal</span>
+                </div>
+                <div style="display:flex;align-items:center;gap:7px;font-size:12.5px" class="mono">
+                  <div class="ch ch-wa" style="width:20px;height:20px;font-size:11px">📱</div>
+                  +55 85 9 9922-1100 <span class="badge badge-muted" style="font-size:10px;padding:1px 6px">Secundário</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div><!-- /v-dashboard -->
+
+
+    <!-- ── VIEW: Contatos ── -->
+    <div class="view" id="v-contatos">
+      <div class="view-header">
+        <div><div class="view-title">Contatos</div><div class="view-sub">1.247 cadastrados</div></div>
+        <div style="display:flex;gap:9px">
+          <button class="btn btn-secondary btn-sm">↑ Importar CSV</button>
+          <button class="btn btn-primary" onclick="openM('m-contact')">+ Novo Contato</button>
+        </div>
+      </div>
+      <div class="tbl-card">
+        <div class="tbl-toolbar">
+          <div class="tbl-search">
+            <span class="tbl-search-icon">⌕</span>
+            <input type="text" placeholder="Buscar nome, número, tag..." oninput="filterContacts(this.value)">
+          </div>
+          <div style="display:flex;gap:8px">
+            <select class="tbl-filter-select">
+              <option>Todos os canais</option><option>WhatsApp</option><option>Instagram</option><option>Telegram</option>
+            </select>
+            <select class="tbl-filter-select">
+              <option>Todas as tags</option><option>lead</option><option>cliente</option><option>vip</option>
+            </select>
+          </div>
+        </div>
+        <table>
+          <thead>
+            <tr>
+              <th>Contato</th><th>WhatsApp</th><th>Canais</th>
+              <th>Tags</th><th>Último Contato</th><th>Status</th><th style="width:90px"></th>
+            </tr>
+          </thead>
+          <tbody id="contacts-body"></tbody>
+        </table>
+      </div>
+    </div><!-- /v-contatos -->
+
+
+    <!-- ── VIEW: Disparos ── -->
+    <div class="view" id="v-disparos">
+      <div class="view-header">
+        <div><div class="view-title">Disparos</div><div class="view-sub">Campanhas em massa</div></div>
+        <button class="btn btn-primary" onclick="openM('m-disparo')">+ Novo Disparo</button>
+      </div>
+      <div class="tbl-card">
+        <div class="tbl-toolbar">
+          <span class="tbl-toolbar-title">Campanhas</span>
+          <div style="display:flex;gap:6px">
+            <button class="btn btn-ghost btn-sm">Todos</button>
+            <button class="btn btn-ghost btn-sm">Agendados</button>
+          </div>
+        </div>
+        <table>
+          <thead>
+            <tr><th>Nome</th><th>Canal</th><th>Destinatários</th><th>Enviados</th><th>Respostas</th><th>Status</th><th>Data</th><th></th></tr>
+          </thead>
+          <tbody id="disparos-body"></tbody>
+        </table>
+      </div>
+    </div><!-- /v-disparos -->
+
+
+    <!-- ── VIEW: Conversas ── -->
+    <div class="view" id="v-conversas">
+      <div class="view-header">
+        <div><div class="view-title">Conversas</div><div class="view-sub">Inbox unificado</div></div>
+        <div style="display:flex;gap:7px">
+          <button class="btn btn-ghost btn-sm">Todas</button>
+          <button class="btn btn-ghost btn-sm">Não lidas</button>
+        </div>
+      </div>
+      <div class="conv-layout">
+        <div class="conv-list-pane">
+          <div class="conv-list-hd">
+            Conversas <span class="badge badge-gold" style="margin-left:6px">3</span>
+          </div>
+          <div id="conv-list"></div>
+        </div>
+        <div class="conv-win">
+          <div class="conv-topbar" id="conv-topbar">
+            <span style="color:var(--muted2);font-size:13px">Selecione uma conversa</span>
+          </div>
+          <div class="conv-msgs" id="conv-msgs"></div>
+          <div class="conv-input-bar">
+            <input type="text" id="conv-input" placeholder="Digite uma mensagem...">
+            <button class="btn btn-primary btn-sm" onclick="sendMsg()">Enviar</button>
+            <button class="btn btn-ghost btn-sm" title="Anexo">📎</button>
+          </div>
+        </div>
+      </div>
+    </div><!-- /v-conversas -->
+
+
+    <!-- ── VIEW: Fluxos ── -->
+    <div class="view" id="v-fluxos">
+      <div class="view-header">
+        <div>
+          <div class="view-title">Fluxos de Automação</div>
+          <div class="view-sub" id="flows-count">12 fluxos ativos</div>
+        </div>
+        <button class="btn btn-primary" onclick="openFlowModal()">+ Novo Fluxo</button>
+      </div>
+      <div class="cards-grid" id="flows-grid"></div>
+    </div><!-- /v-fluxos -->
+
+
+    <!-- ── VIEW: Integrações ── -->
+    <div class="view" id="v-integracoes">
+      <div class="view-header">
+        <div><div class="view-title">Integrações</div><div class="view-sub">APIs e conexões externas</div></div>
+      </div>
+      <div class="int-grid">
+
+        <!-- WhatsApp -->
+        <div class="int-card">
+          <div class="int-card-hd">
+            <div class="int-logo" style="background:rgba(37,211,102,0.12)">📱</div>
+            <div><div class="int-title">WhatsApp Business</div><div class="int-desc">Meta Cloud API — oficial</div></div>
+            <label class="toggle" style="margin-left:auto"><input type="checkbox" checked><div class="toggle-sl"></div></label>
+          </div>
+          <div class="int-field"><label>Access Token</label><input type="password" placeholder="EAAxxxxx..."></div>
+          <div class="int-field"><label>Phone Number ID</label><input type="text" placeholder="1234567890123456"></div>
+          <div class="int-field"><label>Verify Token (Webhook)</label><input type="text" placeholder="seu_token_secreto"></div>
+          <div class="int-ft">
+            <span class="badge badge-green">● Conectado</span>
+            <button class="btn btn-primary btn-sm" onclick="saveIntegration('WhatsApp')">Salvar</button>
+          </div>
+        </div>
+
+        <!-- Instagram -->
+        <div class="int-card">
+          <div class="int-card-hd">
+            <div class="int-logo" style="background:rgba(225,48,108,0.12)">📸</div>
+            <div><div class="int-title">Instagram DM</div><div class="int-desc">Meta Graph API</div></div>
+            <label class="toggle" style="margin-left:auto"><input type="checkbox" checked><div class="toggle-sl"></div></label>
+          </div>
+          <div class="int-field"><label>Page Access Token</label><input type="password" placeholder="EAAxxxxx..."></div>
+          <div class="int-field"><label>Instagram Page ID</label><input type="text" placeholder="987654321098765"></div>
+          <div class="int-ft">
+            <span class="badge badge-green">● Conectado</span>
+            <button class="btn btn-primary btn-sm" onclick="saveIntegration('Instagram')">Salvar</button>
+          </div>
+        </div>
+
+        <!-- Telegram -->
+        <div class="int-card">
+          <div class="int-card-hd">
+            <div class="int-logo" style="background:rgba(0,136,204,0.12)">✈</div>
+            <div><div class="int-title">Telegram Bot</div><div class="int-desc">Bot API — mensagens e grupos</div></div>
+            <label class="toggle" style="margin-left:auto"><input type="checkbox"><div class="toggle-sl"></div></label>
+          </div>
+          <div class="int-field"><label>Bot Token</label><input type="password" placeholder="123456:ABCxxxxxxxx"></div>
+          <div class="int-field"><label>Webhook URL</label><input type="text" placeholder="Cole a URL do Apps Script"></div>
+          <div class="int-ft">
+            <span class="badge badge-orange">⊙ Não configurado</span>
+            <button class="btn btn-primary btn-sm" onclick="saveIntegration('Telegram')">Salvar</button>
+          </div>
+        </div>
+
+        <!-- ActiveCampaign -->
+        <div class="int-card">
+          <div class="int-card-hd">
+            <div class="int-logo" style="background:var(--accent-bg)">⚙</div>
+            <div><div class="int-title">ActiveCampaign</div><div class="int-desc">CRM — sync de contatos e tags</div></div>
+            <label class="toggle" style="margin-left:auto"><input type="checkbox"><div class="toggle-sl"></div></label>
+          </div>
+          <div class="int-field"><label>API URL</label><input type="text" placeholder="https://suaconta.api-us1.com"></div>
+          <div class="int-field"><label>API Key</label><input type="password" placeholder="Chave de API"></div>
+          <div class="int-field">
+            <label>Sincronizar</label>
+            <select><option>A cada nova mensagem</option><option>Nova conversa</option><option>Ao adicionar tag</option></select>
+          </div>
+          <div class="int-ft">
+            <span class="badge badge-muted">● Desconectado</span>
+            <button class="btn btn-primary btn-sm" onclick="saveIntegration('ActiveCampaign')">Salvar</button>
+          </div>
+        </div>
+
+      </div>
+    </div><!-- /v-integracoes -->
+
+
+    <!-- ── VIEW: Configurações ── -->
+    <div class="view" id="v-config">
+      <div class="view-header">
+        <div><div class="view-title">Configurações</div><div class="view-sub">Backend e ajustes gerais</div></div>
+      </div>
+      <div style="max-width:620px;display:flex;flex-direction:column;gap:14px">
+
+        <div class="int-card">
+          <div class="int-card-hd" style="margin-bottom:14px">
+            <div class="int-logo" style="background:var(--accent-bg)">⊞</div>
+            <div><div class="int-title">Google Apps Script</div><div class="int-desc">URL do Web App publicado (backend)</div></div>
+          </div>
+          <div class="int-field"><label>Web App URL</label>
+            <input type="text" id="api-url-input" placeholder="https://script.google.com/macros/s/.../exec">
+          </div>
+          <div class="int-field"><label>Google Sheet ID</label>
+            <input type="text" placeholder="ID da planilha (da URL do Google Sheets)">
+          </div>
+          <div class="int-ft">
+            <span style="font-size:12px;color:var(--muted2)">Cole após publicar o script</span>
+            <div style="display:flex;gap:8px">
+              <button class="btn btn-secondary btn-sm" onclick="saveApiUrl()">Salvar URL</button>
+              <button class="btn btn-primary btn-sm"  onclick="testApiConnection()">Testar Conexão</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="int-card">
+          <div class="int-card-hd" style="margin-bottom:14px">
+            <div class="int-logo" style="background:var(--green-bg)">📱</div>
+            <div><div class="int-title">Números de Envio</div><div class="int-desc">Números que iniciam conversas</div></div>
+          </div>
+          <div id="num-list" style="display:flex;flex-direction:column;gap:9px;margin-bottom:14px"></div>
+          <button class="btn btn-secondary btn-sm" onclick="openM('m-number')">+ Adicionar Número</button>
+        </div>
+
+        <div class="int-card">
+          <div class="int-card-hd" style="margin-bottom:14px">
+            <div class="int-logo" style="background:var(--gold-bg)">⚑</div>
+            <div><div class="int-title">Limites e Segurança</div><div class="int-desc">Anti-spam e controle de disparo</div></div>
+          </div>
+          <div class="frow">
+            <div class="int-field"><label>Limite por hora</label><input type="number" value="100"></div>
+            <div class="int-field"><label>Intervalo entre msgs (seg)</label><input type="number" value="3"></div>
+          </div>
+          <div class="int-field">
+            <label>Horário permitido</label>
+            <select><option>08:00 — 20:00 (Recomendado)</option><option>09:00 — 18:00 (Comercial)</option><option>Sem restrição</option></select>
+          </div>
+          <div class="int-ft">
+            <span style="font-size:12px;color:var(--muted2)">Meta bloqueia fora do horário comercial</span>
+            <button class="btn btn-primary btn-sm" onclick="notify('Configurações salvas!','green')">Salvar</button>
+          </div>
+        </div>
+
+      </div>
+    </div><!-- /v-config -->
+
+  </div><!-- /main -->
+</div><!-- /app -->
+
+
+<!-- ════════════════════════════════════════════════
+     MODAIS
+════════════════════════════════════════════════ -->
+
+<!-- Modal: Novo Contato -->
+<div class="modal-bg" id="m-contact">
+  <div class="modal">
+    <div class="modal-hd"><div class="modal-title">Novo Contato</div><div class="modal-x" onclick="closeM('m-contact')">✕</div></div>
+    <div class="modal-body">
+      <div class="frow">
+        <div class="ff"><label>Nome</label><input type="text" id="c-name" placeholder="Nome completo"></div>
+        <div class="ff"><label>WhatsApp</label><input type="text" id="c-phone" placeholder="+55 11 9 0000-0000"></div>
+      </div>
+      <div class="frow">
+        <div class="ff"><label>Instagram</label><input type="text" id="c-ig" placeholder="@usuario"></div>
+        <div class="ff"><label>Telegram</label><input type="text" id="c-tg" placeholder="@usuario ou ID"></div>
+      </div>
+      <div class="ff"><label>Tags</label><input type="text" id="c-tags" placeholder="lead, cliente, vip (separar por vírgula)"></div>
+      <div class="ff"><label>Observações</label><textarea id="c-obs" placeholder="Notas sobre o contato..."></textarea></div>
+    </div>
+    <div class="modal-ft">
+      <button class="btn btn-ghost" onclick="closeM('m-contact')">Cancelar</button>
+      <button class="btn btn-primary" onclick="addContact()">Adicionar Contato</button>
+    </div>
+  </div>
+</div>
+
+<!-- Modal: Novo Disparo -->
+<div class="modal-bg" id="m-disparo">
+  <div class="modal">
+    <div class="modal-hd"><div class="modal-title">Novo Disparo</div><div class="modal-x" onclick="closeM('m-disparo')">✕</div></div>
+    <div class="modal-body">
+      <div class="ff"><label>Nome da Campanha</label><input type="text" id="d-name" placeholder="Ex: Promoção Julho, Follow-up Leads..."></div>
+      <div class="frow">
+        <div class="ff"><label>Canal</label>
+          <select id="d-canal"><option>WhatsApp</option><option>Instagram DM</option><option>Telegram</option><option>Todos</option></select>
+        </div>
+        <div class="ff"><label>Filtrar por Tag</label>
+          <select><option>Todos os contatos</option><option>lead</option><option>cliente</option><option>vip</option></select>
+        </div>
+      </div>
+      <div class="ff"><label>Mensagem</label>
+        <textarea id="d-msg" placeholder="Olá {{nome}}, temos uma novidade especial para você...&#10;&#10;Use {{nome}} para personalizar com o primeiro nome."></textarea>
+      </div>
+      <div class="frow">
+        <div class="ff"><label>Agendamento</label>
+          <select><option>Enviar agora</option><option>Agendar para...</option></select>
+        </div>
+        <div class="ff"><label>Número de Envio</label>
+          <select><option>+55 85 9 8811-2233 (Principal)</option><option>+55 85 9 9922-1100 (Secundário)</option></select>
+        </div>
+      </div>
+    </div>
+    <div class="modal-ft">
+      <button class="btn btn-ghost" onclick="closeM('m-disparo')">Cancelar</button>
+      <button class="btn btn-secondary">Salvar Rascunho</button>
+      <button class="btn btn-primary" onclick="createDisparo()">Iniciar Disparo ↗</button>
+    </div>
+  </div>
+</div>
+
+<!-- Modal: Novo Fluxo -->
+<div class="modal-bg" id="m-fluxo">
+  <div class="modal modal-lg">
+    <div class="modal-hd"><div class="modal-title">Novo Fluxo de Automação</div><div class="modal-x" onclick="closeM('m-fluxo')">✕</div></div>
+    <div class="modal-body">
+      <div class="frow">
+        <div class="ff">
+          <label>Nome do Fluxo</label>
+          <input type="text" id="fl-name" placeholder="Ex: Boas-vindas, Follow-up...">
+          <div class="err-msg" id="fl-name-err" style="display:none"></div>
+        </div>
+        <div class="ff"><label>Canal</label>
+          <select id="fl-canal">
+            <option value="wa">WhatsApp</option><option value="ig">Instagram</option>
+            <option value="tg">Telegram</option><option value="todos">Todos</option>
+          </select>
+        </div>
+      </div>
+      <div class="frow">
+        <div class="ff"><label>Gatilho</label>
+          <select id="fl-trigger">
+            <option value="novo_contato">Novo contato adicionado</option>
+            <option value="palavra_chave">Palavra-chave recebida</option>
+            <option value="mensagem_recebida">Qualquer mensagem recebida</option>
+            <option value="tag_adicionada">Tag adicionada ao contato</option>
+            <option value="agendado">Agendado (horário fixo)</option>
+            <option value="webhook">Webhook externo</option>
+          </select>
+        </div>
+        <div class="ff"><label id="fl-trigger-label">Valor do Gatilho</label>
+          <input type="text" id="fl-trigger-val" placeholder="Ex: OI, QUERO, INFO...">
+        </div>
+      </div>
+      <div class="ff" style="margin-bottom:4px">
+        <label>Passos do Fluxo</label>
+        <div class="fb-container">
+          <div class="fb-steps" id="fb-steps"></div>
+          <div class="fb-add-step" onclick="fbAddStep()">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+              <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
+            </svg>
+            Adicionar Passo
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="modal-ft">
+      <button class="btn btn-ghost" onclick="closeM('m-fluxo')">Cancelar</button>
+      <button class="btn btn-primary" onclick="createFlow()">Criar Fluxo ↗</button>
+    </div>
+  </div>
+</div>
+
+<!-- Modal: Adicionar Número -->
+<div class="modal-bg" id="m-number">
+  <div class="modal modal-sm">
+    <div class="modal-hd"><div class="modal-title">Adicionar Número</div><div class="modal-x" onclick="closeM('m-number')">✕</div></div>
+    <div class="modal-body">
+      <div class="frow">
+        <div class="ff"><label>Número WhatsApp</label><input type="text" id="num-phone" placeholder="+55 11 9 0000-0000"></div>
+        <div class="ff"><label>Apelido</label><input type="text" id="num-label" placeholder="Ex: Principal, Vendas..."></div>
+      </div>
+      <div class="ff"><label>Phone Number ID (Meta)</label><input type="text" id="num-meta-id" placeholder="ID do número no painel Meta Business"></div>
+      <div class="info-box">ℹ O Phone Number ID está em: Meta Business Suite → WhatsApp → Números de telefone</div>
+    </div>
+    <div class="modal-ft">
+      <button class="btn btn-ghost" onclick="closeM('m-number')">Cancelar</button>
+      <button class="btn btn-primary" onclick="addNumber()">Adicionar</button>
+    </div>
+  </div>
+</div>
+
+
+<!-- ════════════════════════════════════════════════
+     NOTIFICAÇÃO TOAST
+════════════════════════════════════════════════ -->
+<div class="notif" id="notif">
+  <div class="notif-dot" id="notif-dot"></div>
+  <span id="notif-txt"></span>
+</div>
+
+
+<!-- ════════════════════════════════════════════════
+     JAVASCRIPT (carregado na ordem correta)
+════════════════════════════════════════════════ -->
+<script src="js/config.js"></script>
+<script src="js/state.js"></script>
+<script src="js/auth.js"></script>
+<script src="js/api.js"></script>
+<script src="js/notify-router.js"></script>
+<script src="js/contacts.js"></script>
+<script src="js/disparos.js"></script>
+<script src="js/flow-builder.js"></script>
+<script src="js/flows.js"></script>
+<script src="js/conversations.js"></script>
+<script src="js/settings.js"></script>
+<script src="js/main.js"></script>
+
+</body>
+</html>

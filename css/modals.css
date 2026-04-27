@@ -1,0 +1,138 @@
+/* ============================================================
+   4flow — Modais e Formulários
+   ============================================================ */
+
+/* ── Overlay ── */
+.modal-bg {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 10, 25, 0.78);
+  z-index: 200;
+  align-items: flex-start;
+  justify-content: center;
+  overflow-y: auto;
+  padding: 40px 20px;
+  backdrop-filter: blur(6px);
+}
+.modal-bg.open { display: flex; }
+
+/* ── Modal ── */
+.modal {
+  background: var(--sidebar2);
+  border: 1px solid var(--border2);
+  border-radius: var(--radius-xl);
+  width: 560px;
+  max-width: 95vw;
+  margin: auto;
+}
+.modal-lg  { width: 720px; }
+.modal-sm  { width: 420px; }
+
+.modal-hd {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20px 24px;
+  border-bottom: 1px solid var(--border);
+}
+.modal-title { font-size: 17px; font-weight: 800; }
+
+.modal-x {
+  width: 30px;
+  height: 30px;
+  border-radius: 8px;
+  background: var(--card2);
+  border: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: var(--muted2);
+  font-size: 14px;
+  transition: all .15s;
+}
+.modal-x:hover { color: var(--text); background: var(--card3); }
+
+.modal-body { padding: 22px 24px; }
+
+.modal-ft {
+  display: flex;
+  gap: 10px;
+  justify-content: flex-end;
+  padding: 16px 24px;
+  border-top: 1px solid var(--border);
+}
+
+/* ── Campos de formulário ── */
+.ff { margin-bottom: 16px; }
+
+.ff label {
+  display: block;
+  font-size: 11.5px;
+  color: var(--muted2);
+  margin-bottom: 7px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: .6px;
+}
+
+.ff input,
+.ff select,
+.ff textarea,
+.int-field input,
+.int-field select {
+  width: 100%;
+  background: var(--card2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 10px 13px;
+  color: var(--text);
+  font-size: 13.5px;
+  font-family: var(--font-sans);
+  outline: none;
+  transition: border-color .15s;
+}
+
+.int-field input,
+.int-field select {
+  font-family: var(--font-mono);
+  font-size: 13px;
+}
+
+.ff input:focus,
+.ff select:focus,
+.ff textarea:focus,
+.int-field input:focus,
+.int-field select:focus { border-color: var(--accent); }
+
+.ff textarea { resize: vertical; min-height: 90px; line-height: 1.55; }
+
+.ff select,
+.int-field select {
+  cursor: pointer;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23888' stroke-width='2'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 12px center;
+  padding-right: 32px;
+  appearance: none;
+}
+
+/* Grid de 2 colunas dentro do modal */
+.frow { display: grid; grid-template-columns: 1fr 1fr; gap: 13px; }
+
+/* Erros de validação */
+.ff-err { border-color: var(--red) !important; }
+.err-msg { font-size: 11.5px; color: var(--red); margin-top: 5px; }
+
+/* Campos de integração */
+.int-field { margin-bottom: 12px; }
+.int-field label {
+  display: block;
+  font-size: 11.5px;
+  color: var(--muted2);
+  margin-bottom: 6px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: .5px;
+}

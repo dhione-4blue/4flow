@@ -1,0 +1,125 @@
+/* ============================================================
+   4flow — Layout Principal
+   ============================================================ */
+
+/* App wrapper */
+#app {
+  flex: 1;
+  overflow: hidden;
+  display: flex;
+}
+
+/* Área principal */
+.main {
+  flex: 1;
+  overflow-y: auto;
+  background: var(--bg);
+}
+
+/* Views */
+.view {
+  display: none;
+  padding: 28px 32px;
+  animation: fadein .2s ease;
+}
+.view.active { display: block; }
+
+/* Cabeçalho da view */
+.view-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 26px;
+}
+.view-title {
+  font-size: 22px;
+  font-weight: 800;
+  letter-spacing: -0.4px;
+}
+.view-sub {
+  font-size: 13px;
+  color: var(--muted2);
+  margin-top: 3px;
+}
+
+/* Stats grid */
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 14px;
+  margin-bottom: 22px;
+}
+.stat-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 18px 20px;
+}
+.stat-label {
+  font-size: 11.5px;
+  color: var(--muted2);
+  font-weight: 600;
+  margin-bottom: 8px;
+  text-transform: uppercase;
+  letter-spacing: .6px;
+}
+.stat-value {
+  font-size: 27px;
+  font-weight: 800;
+  font-family: var(--font-mono);
+  letter-spacing: -1px;
+}
+.stat-change {
+  font-size: 12px;
+  margin-top: 5px;
+  display: flex;
+  align-items: center;
+  gap: 3px;
+}
+.stat-change.up   { color: var(--green); }
+.stat-change.down { color: var(--red); }
+
+/* Activity feed */
+.activity-item {
+  display: flex;
+  align-items: center;
+  gap: 13px;
+  padding: 13px 20px;
+  border-bottom: 1px solid var(--border);
+}
+.activity-item:last-child { border-bottom: none; }
+.activity-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+.activity-text {
+  flex: 1;
+  font-size: 13px;
+  line-height: 1.4;
+}
+.activity-time {
+  font-size: 11.5px;
+  color: var(--muted);
+  font-family: var(--font-mono);
+  white-space: nowrap;
+}
+
+/* Channel bar */
+.channel-bar-row { margin-bottom: 15px; }
+.channel-bar-row:last-of-type { margin-bottom: 0; }
+.channel-bar-track {
+  height: 5px;
+  background: var(--card2);
+  border-radius: 4px;
+  margin-top: 6px;
+}
+.channel-bar-fill { height: 100%; border-radius: 4px; }
+
+/* Grid de dois painéis */
+.two-col {
+  display: grid;
+  grid-template-columns: 1.4fr 1fr;
+  gap: 14px;
+}

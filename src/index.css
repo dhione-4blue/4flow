@@ -1,0 +1,58 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ===== Design tokens 4Flow / 4blue ===== */
+:root {
+  --navy: #011628;
+  --ocean: #03427D;
+  --primary: #006AB1;
+  --sky: #0082C6;
+  --gold: #F8B90C;
+  --cloud: #F3F3FA;
+
+  --success: #059669;
+  --warning: #d97706;
+  --danger: #dc2626;
+
+  --score-low: #ef4444;
+  --score-mid: #F8B90C;
+  --score-high: #10b981;
+}
+
+html, body, #root {
+  height: 100%;
+}
+
+body {
+  @apply bg-cloud text-navy font-sans antialiased;
+}
+
+/* Scrollbar discreta */
+::-webkit-scrollbar { width: 8px; height: 8px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: #c5c9d6; border-radius: 4px; }
+::-webkit-scrollbar-thumb:hover { background: #9aa0b5; }
+
+/* Animações */
+@keyframes slide-in-right {
+  from { transform: translateX(40px); opacity: 0; }
+  to { transform: translateX(0); opacity: 1; }
+}
+@keyframes fade-in {
+  from { opacity: 0; transform: translateY(6px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.anim-slide { animation: slide-in-right 0.25s ease-out; }
+.anim-fade { animation: fade-in 0.2s ease-out; }
+
+/* Inputs padrão */
+.input-base {
+  @apply w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm
+    placeholder:text-gray-400 focus:border-primary focus:outline-none
+    focus:ring-2 focus:ring-primary/20 disabled:bg-gray-100 disabled:text-gray-500;
+}
+
+.label-base {
+  @apply mb-1 block text-xs font-semibold uppercase tracking-wide text-gray-500;
+}
